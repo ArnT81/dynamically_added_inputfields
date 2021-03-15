@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+//COMPONENTS
+import OrderPage from './components/OrderPage';
 
+//todo: If an div in the middle gets erased and you add a new one afterwards the key is not unique, find a better variable
 function App() {
+
+  useEffect(() => {
+    window.addEventListener('keypress', preventReloadOnEnter)
+    return window.addEventListener('keypress', preventReloadOnEnter)
+  }, [])
+
+  function preventReloadOnEnter(e) {
+    e.keyCode === 13 && e.preventDefault()
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <OrderPage />
     </div>
   );
 }

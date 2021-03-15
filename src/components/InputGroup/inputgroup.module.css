@@ -1,0 +1,16 @@
+.inputgroup{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 700px;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
+.quantity {
+    width: 45px;
+}
+
+.price {
+    width: 55px;
+}
