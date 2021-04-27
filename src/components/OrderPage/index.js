@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //COMPONENTS
 import InputGroup from '../InputGroup';
 import TouchableArea from '../TouchableArea';
@@ -7,9 +7,19 @@ import Input from '../Input';
 import styles from './orderpage.module.css';
 
 
+// render state is used to give unique key for the inputGroups
+
+
 function OrderPage() {
     const [inputValue, setInputValue] = useState('')
-    const [newInputfield, setNewInputfield] = useState([1])
+    const [newInputfield, setNewInputfield] = useState([{ id: 1 }])
+    const [render, setRender] = useState(1);
+    var combinedState = []
+
+
+    useEffect(() => {
+        setRender(render + 1)
+    }, [newInputfield])
 
     //FUNCTIONS
     function handleChange(e) {
@@ -25,7 +35,7 @@ function OrderPage() {
     }
 
     function addNewDiv() {
-        setNewInputfield([...newInputfield, newInputfield.push(1)])
+        setNewInputfield([...newInputfield, ({ id: render })])
     }
 
     function cancel() {
@@ -36,8 +46,10 @@ function OrderPage() {
 
     function send(e) {
         e.preventDefault();
+         setInputValue({ ...inputValue, order: combinedState })
         console.log(inputValue);
     }
+
 
     function removeDiv(fieldToRemove) {
         //  REMOVES THE INPUTVALUES FROM DIV
@@ -49,7 +61,7 @@ function OrderPage() {
         // REMOVES ENTIRE DIV
         if (newInputfield.length <= 1) return
         else {
-            setNewInputfield(newInputfield.filter((i) => i !== fieldToRemove))
+            setNewInputfield(newInputfield.filter((i) => i.id !== fieldToRemove))
         }
     }
 
@@ -58,13 +70,17 @@ function OrderPage() {
         <div className={styles.orderpage}>
             <form>
                 {/* DYNAMICALLY ADDED INPUTFIELDS */}
-                {newInputfield.map((index) => {
+                {newInputfield.map((field) => {
                     return (
                         <InputGroup
-                            key={index}
-                            id={index}
-                            handleChange={handleChange}
+                            key={field.id}
+                            id={field.id}
                             removeDiv={removeDiv}
+                            addNewDiv={addNewDiv}
+                            inputValue={inputValue}
+                            setInputValue={setInputValue}
+                            send={send}
+                            combinedState={combinedState}
                         />
                     )
                 })}
@@ -106,12 +122,12 @@ function OrderPage() {
                     <button
                         className={styles.formbutton}
                         onClick={cancel}>
-                        Ångra
+                        Cancel
                     </button>
                     <button
                         className={styles.formbutton}
                         onClick={send}>
-                        Beställ
+                        Send
                     </button>
                 </div>
             </form>
