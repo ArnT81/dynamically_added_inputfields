@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 //COMPONENTS
 import OrderPage from './components/OrderPage';
 
-//todo: If an div in the middle gets erased and you add a new one afterwards the key is not unique, find a better variable
+
+//! Main source of truth OrderPage
+//! InputGroup is the three dynamically added inputfields in a div  
+//! TouchableArea is just an expanded area for the onClick
+
 function App() {
 
   useEffect(() => {

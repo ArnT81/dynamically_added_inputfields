@@ -9,12 +9,13 @@ import styles from './orderpage.module.css';
 
 // render state is used to give unique key for the inputGroups
 
+//todo tar inte bort värden när en av ordrarna försvinner
 
 function OrderPage() {
-    const [inputValue, setInputValue] = useState('')
+    const [customerDetails, setCustomerDetails] = useState('')
     const [newInputfield, setNewInputfield] = useState([{ id: 1 }])
     const [render, setRender] = useState(1);
-    var combinedState = []
+    const [order, setOrder] = useState([])
 
 
     useEffect(() => {
@@ -23,7 +24,7 @@ function OrderPage() {
 
     //FUNCTIONS
     function handleChange(e) {
-        setInputValue({ ...inputValue, [e.target.name]: e.target.value })
+        setCustomerDetails({ ...customerDetails, [e.target.name]: e.target.value })
     }
 
     function clearInputFields() {
@@ -39,32 +40,31 @@ function OrderPage() {
     }
 
     function cancel() {
-        setInputValue('');
+        setCustomerDetails('');
         clearInputFields();
         setNewInputfield([1])
     }
 
     function send(e) {
         e.preventDefault();
-         setInputValue({ ...inputValue, order: combinedState })
-        console.log(inputValue);
+        console.log('customer details', customerDetails);
+        console.log('order', order);
     }
 
 
     function removeDiv(fieldToRemove) {
         //  REMOVES THE INPUTVALUES FROM DIV
-        let copyOfState = inputValue;
+        let copyOfState = customerDetails;
         delete copyOfState[`product${fieldToRemove}`];
         delete copyOfState[`quantity${fieldToRemove}`];
         delete copyOfState[`price${fieldToRemove}`];
-        setInputValue(copyOfState);
+        setCustomerDetails(copyOfState);
         // REMOVES ENTIRE DIV
         if (newInputfield.length <= 1) return
         else {
             setNewInputfield(newInputfield.filter((i) => i.id !== fieldToRemove))
         }
     }
-
 
     return (
         <div className={styles.orderpage}>
@@ -76,11 +76,7 @@ function OrderPage() {
                             key={field.id}
                             id={field.id}
                             removeDiv={removeDiv}
-                            addNewDiv={addNewDiv}
-                            inputValue={inputValue}
-                            setInputValue={setInputValue}
-                            send={send}
-                            combinedState={combinedState}
+                            order={order}
                         />
                     )
                 })}
