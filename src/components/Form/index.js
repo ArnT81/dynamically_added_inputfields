@@ -7,20 +7,17 @@ import Input from '../Input';
 import styles from './orderpage.module.css';
 
 
-// render state is used to give unique key for the inputGroups
-
-//todo tar inte bort värden när en av ordrarna försvinner
-
 function OrderPage() {
-    const [customerDetails, setCustomerDetails] = useState('')
-    const [newInputfield, setNewInputfield] = useState([{ id: 1 }])
-    const [render, setRender] = useState(1);
+    const [customerDetails, setCustomerDetails] = useState()
+    const [inputGroup, setInputGroup] = useState([{ id: 1 }])
+    const [uniqueId, setUniqueId] = useState(1);
     const [order, setOrder] = useState([])
 
-
+    //LIFECYCLEHOOKS
     useEffect(() => {
-        setRender(render + 1)
-    }, [newInputfield])
+        setUniqueId(uniqueId + 1)
+        return () => setUniqueId(uniqueId + 1)
+    }, [inputGroup])
 
     //FUNCTIONS
     function handleChange(e) {
@@ -36,13 +33,14 @@ function OrderPage() {
     }
 
     function addNewDiv() {
-        setNewInputfield([...newInputfield, ({ id: render })])
+        setInputGroup([...inputGroup, ({ id: uniqueId })])
     }
 
-    function cancel() {
+    function cancel(e) {
+        e.preventDefault();
         setCustomerDetails('');
         clearInputFields();
-        setNewInputfield([1])
+        setInputGroup([uniqueId + 1])
     }
 
     function send(e) {
@@ -51,65 +49,59 @@ function OrderPage() {
         console.log('order', order);
     }
 
-
     function removeDiv(fieldToRemove) {
-        //  REMOVES THE INPUTVALUES FROM DIV
-        let copyOfState = customerDetails;
-        delete copyOfState[`product${fieldToRemove}`];
-        delete copyOfState[`quantity${fieldToRemove}`];
-        delete copyOfState[`price${fieldToRemove}`];
-        setCustomerDetails(copyOfState);
-        // REMOVES ENTIRE DIV
-        if (newInputfield.length <= 1) return
+        // REMOVES VALUES FROM THE DIV INPUTS
+        setOrder(order.filter((i) => i.id !== fieldToRemove))
+        // REMOVES DIV FROM THE SCREEN
+        if (inputGroup.length <= 1) return
         else {
-            setNewInputfield(newInputfield.filter((i) => i.id !== fieldToRemove))
+            setInputGroup(inputGroup.filter((div) => div.id !== fieldToRemove))
         }
     }
+
 
     return (
         <div className={styles.orderpage}>
             <form>
                 {/* DYNAMICALLY ADDED INPUTFIELDS */}
-                {newInputfield.map((field) => {
+                {inputGroup.map((div) => {
                     return (
                         <InputGroup
-                            key={field.id}
-                            id={field.id}
+                            key={div.id}
+                            id={div.id}
                             removeDiv={removeDiv}
                             order={order}
                         />
                     )
                 })}
-
                 <TouchableArea
                     functionality={addNewDiv}>
                     +
                 </TouchableArea>
-
-                {/* CONTACT INFORMATION */}
-                <div className={styles.contactinfocontainer}>
+                {/* CUSTOMER DETAILS */}
+                <div className={styles.customerdetailscontainer}>
                     <Input
-                        label="Förnamn:"
+                        label="First Name:"
                         name="firstName"
                         handleChange={handleChange}
                     />
                     <Input
-                        label="Efternamn:"
+                        label="Last Name:"
                         name="lastName"
                         handleChange={handleChange}
                     />
                     <Input
-                        label="Adress:"
+                        label="Address:"
                         name="address"
                         handleChange={handleChange}
                     />
                     <Input
-                        label="Postnr:"
+                        label="Zip Code:"
                         name="zip"
                         handleChange={handleChange}
                     />
                     <Input
-                        label="Ort:"
+                        label="City:"
                         name="city"
                         handleChange={handleChange}
                     />

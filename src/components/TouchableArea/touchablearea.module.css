@@ -1,6 +1,4 @@
 .touchablearea {
-    position: relative;
-    top: -4px;
     display: flex;
     align-items: center;
     justify-content: center;

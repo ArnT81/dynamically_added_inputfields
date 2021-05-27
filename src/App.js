@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 //COMPONENTS
-import OrderPage from './components/OrderPage';
+import Form from './components/Form';
 
 
-//! Main source of truth OrderPage
-//! InputGroup is the three dynamically added inputfields in a div  
-//! TouchableArea is just an expanded area for the onClick
+//! Main source of truth Form
+//! InputGroup-component is the three dynamically added inputfields  
+//! TouchableArea is just an expanded area for the onClick (used to add and remove "InputGroups")
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div>
-      <OrderPage />
+      <Form />
     </div>
   );
 }
